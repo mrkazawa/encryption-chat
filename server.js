@@ -22,6 +22,9 @@ io.on("connection", (socket) => {
   });
 
   socket.on("broadcast", (data) => {
+    // server can see what messages are being transmitted
+    // through the server
+    console.log(`server can see --> ${data.sender}: ${data.msg}`);
     socket.broadcast.emit("broadcast", data);
   });
 });
@@ -29,11 +32,11 @@ io.on("connection", (socket) => {
 //--------------- Socket End ---------------//
 //--------------- REST API Start ---------------//
 
-app.get("/download", (req, res) => {
+app.get("/download/:username", (req, res) => {
   const data = {
-    publicKey: "server-public-key",
-    algorithm: "ecdsa",
-    hash: "hash-of-server-public-key"
+    username: req.params.username,
+    publicKey: "username-public-key",
+    algorithm: "rsa" // encryption algorithm to use
   };
   res.send(JSON.stringify(data));
 });
